@@ -26,7 +26,7 @@ public class RobotContainer {
     new JoystickButton(test, Button.kX.value).onTrue(new InstantCommand(() -> pneumatics.fireLeft()));
     new JoystickButton(test, Button.kB.value).onTrue(new InstantCommand(() -> pneumatics.fireRight()));
     new JoystickButton(test, Button.kA.value).onTrue(new InstantCommand(() -> pneumatics.fireMid()));
-    new JoystickButton(test, Button.kY.value).onTrue(new InstantCommand(() -> pneumatics.closeAll()));
+    new JoystickButton(test, Button.kY.value).onTrue(new InstantCommand(() -> pneumatics.fireSalvo()));
   }
   
   public Command getAutonomousCommand() {
