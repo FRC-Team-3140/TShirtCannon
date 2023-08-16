@@ -4,12 +4,14 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
+
 public class Pneumatics extends SubsystemBase {
     public Pneumatics(){}
     //Locations are declared as looking at the bot from behind
     public Solenoid leftSolenoid = new Solenoid(4, PneumaticsModuleType.CTREPCM, 0);
     public Solenoid midSolenoid = new Solenoid(4, PneumaticsModuleType.CTREPCM, 2);
     public Solenoid rightSolenoid = new Solenoid(4, PneumaticsModuleType.CTREPCM, 1);
+    private static LightEmittingDiode lights = new LightEmittingDiode();
 
     // Delay Times
     private double valveDelayTime = 0.025;
@@ -22,12 +24,14 @@ public class Pneumatics extends SubsystemBase {
     }
     public void fireLeft(){
         leftSolenoid.set(true);
+        lights.flash(1);
         //slight delay 
         Timer.delay(valveDelayTime);
         leftSolenoid.set(false);
     }
     public void fireMid(){
         midSolenoid.set(true);
+        lights.flash(1);
         //slight delay 
         Timer.delay(valveDelayTime);
 
@@ -35,12 +39,14 @@ public class Pneumatics extends SubsystemBase {
     }
     public void fireRight(){
         rightSolenoid.set(true);
+        lights.flash(1);
         //slight delay 
         Timer.delay(valveDelayTime);
         rightSolenoid.set(false);
     }
     public void fireSalvo(){
         leftSolenoid.set(true);
+        lights.flash(1);
         //slight delay 
         Timer.delay(valveDelayTime);
         leftSolenoid.set(false);
@@ -48,6 +54,7 @@ public class Pneumatics extends SubsystemBase {
         Timer.delay(salvoDelayTime);
 
         midSolenoid.set(true);
+        lights.flash(1);
         //slight delay 
         Timer.delay(valveDelayTime);
         midSolenoid.set(false);
@@ -55,6 +62,7 @@ public class Pneumatics extends SubsystemBase {
         Timer.delay(salvoDelayTime);
 
         rightSolenoid.set(true);
+        lights.flash(1);
         //slight delay 
         Timer.delay(valveDelayTime);
         rightSolenoid.set(false);

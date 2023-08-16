@@ -23,10 +23,12 @@ public class RobotContainer {
   public static XboxController test = new XboxController(0);
   private void configureBindings() {
     driveTrain.setDefaultCommand(new arcadedrive(driveTrain));
-    new JoystickButton(test, Button.kX.value).onTrue(new InstantCommand(() -> pneumatics.fireLeft()));
-    new JoystickButton(test, Button.kB.value).onTrue(new InstantCommand(() -> pneumatics.fireRight()));
-    new JoystickButton(test, Button.kA.value).onTrue(new InstantCommand(() -> pneumatics.fireMid()));
-    new JoystickButton(test, Button.kY.value).onTrue(new InstantCommand(() -> pneumatics.fireSalvo()));
+    //if(Button.kLeftBumper.value == 1){
+      new JoystickButton(test, Button.kX.value).onTrue(new InstantCommand(() -> pneumatics.fireLeft()));
+      new JoystickButton(test, Button.kB.value).onTrue(new InstantCommand(() -> pneumatics.fireRight()));
+      new JoystickButton(test, Button.kA.value).onTrue(new InstantCommand(() -> pneumatics.fireMid()));
+      new JoystickButton(test, Button.kY.value).onTrue(new InstantCommand(() -> pneumatics.fireSalvo()));
+    //}
   }
   
   public Command getAutonomousCommand() {
