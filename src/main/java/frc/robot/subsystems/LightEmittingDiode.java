@@ -27,6 +27,8 @@ public class LightEmittingDiode extends SubsystemBase {
     }
 
     public static void flash(int numOfFlashes){
+        setLedColorSolid(0, 0, 0);
+
         for(int i = 0; i < numOfFlashes; i++){
             setLedColorSolid(255, 255, 255);
 
@@ -44,7 +46,51 @@ public class LightEmittingDiode extends SubsystemBase {
         led.setData(ledBuffer);
     }
 
+    public static void water(){
+        //runs on Bottom Section only
+        for (var i = LEDsections[2][0]; i < LEDsections[2][1]; i++){
+            ledBuffer.setRGB(0, 0, (int)(Math.random()*255)%255);
+        }
+        led.setData(ledBuffer);
+    }
 
+    public static void colorRampUp(int R, int G, int B, double duration, boolean rumble){
+        /***************************************************************/
+        /* This method takes in a color and ramps up to that color over*/
+        /* a duration.                                                 */
+        /***************************************************************/
+        int currentR = 0;
+        int currentG = 0;
+        int currentB = 0;
+
+        if(rumble == true){
+            //RobotContainer.m_controller.setRumble(GenaricHID.RumbleType.kRightRumble, );
+        }
+        
+        for (int i = 0; i < 255; i++){
+            if(i < R){
+                currentR = i;
+            } else {
+                currentR = R;
+            }
+
+            if(i < G){
+                currentG = i;
+            } else {
+                currentG = G;
+            }
+
+            if(i < B){
+                currentB = i;
+            } else {
+                currentB = B;
+            }
+            setLedColorSolid(currentR, currentG, currentB);
+         
+            Timer.delay(duration - 0.02);
+        }
+
+    }
 
     public static void setLedColorSolid(int R, int G, int B){
         for(int i = 0; i < ledBuffer.getLength(); i++){

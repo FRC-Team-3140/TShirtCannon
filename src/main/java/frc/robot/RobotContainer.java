@@ -18,29 +18,30 @@ public class RobotContainer {
   }
   static Pneumatics pneumatics = new Pneumatics();
   DriveTrain driveTrain = new DriveTrain();
-  public static XboxController test = new XboxController(0);
+  public static XboxController m_controller = new XboxController(0);
   private void configureBindings() {
     driveTrain.setDefaultCommand(new arcadedrive(driveTrain));
   }
 
   public static void controlls(){
-    if(test.getLeftBumper()) {
+    if(m_controller.getLeftBumper()) {
       LightEmittingDiode.setLedColorSolid(255, 0, 0);
-      // new JoystickButton(test, Button.kX.value).onTrue(new InstantCommand(() -> pneumatics.fireLeft()));
-      // new JoystickButton(test, Button.kB.value).onTrue(new InstantCommand(() -> pneumatics.fireRight()));
-      // new JoystickButton(test, Button.kA.value).onTrue(new InstantCommand(() -> pneumatics.fireMid()));
-      // new JoystickButton(test, Button.kY.value).onTrue(new InstantCommand(() -> pneumatics.fireSalvo())); 
-      if(test.getXButton()){
+      // new JoystickButton(m_controller, Button.kX.value).onTrue(new InstantCommand(() -> pneumatics.fireLeft()));
+      // new JoystickButton(m_controller, Button.kB.value).onTrue(new InstantCommand(() -> pneumatics.fireRight()));
+      // new JoystickButton(m_controller, Button.kA.value).onTrue(new InstantCommand(() -> pneumatics.fireMid()));
+      // new JoystickButton(m_controller, Button.kY.value).onTrue(new InstantCommand(() -> pneumatics.fireSalvo())); 
+      if(m_controller.getXButton()){
         pneumatics.fireLeft();
-      } else if(test.getBButton()){
+      } else if(m_controller.getBButton()){
         pneumatics.fireRight();
-      } else if(test.getAButton()){
+      } else if(m_controller.getAButton()){
         pneumatics.fireMid();
-      } else if(test.getYButton()) {
+      } else if(m_controller.getYButton()) {
         pneumatics.fireSalvo();
       }
     } else {
       LightEmittingDiode.rainbow();
+      LightEmittingDiode.water();
     }
   }
   
