@@ -8,11 +8,17 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.lang.Math;
 
 public class LightEmittingDiode extends SubsystemBase {
-    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(101);
+    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(148); // 32 LED's in Top | 33 LED's Around Cannon | 83 LED's on the bottom
     private static AddressableLED led;
-    private static int m_rainbowFirstPixelHue = 0;
+    private static final int[] Top = {116, 148};
+    private static final int[] Mid = {83 ,115};
+    private static final int[] Bottom = {0 ,82};
+
+    //min and max LED buffer index for each section
+    private static final int[][] LEDsections = { Top, Mid, Bottom };
 
     public LightEmittingDiode(){
         led = new AddressableLED(0);
@@ -20,7 +26,7 @@ public class LightEmittingDiode extends SubsystemBase {
         led.start();
     }
 
-    public void flash(int numOfFlashes){
+    public static void flash(int numOfFlashes){
         for(int i = 0; i < numOfFlashes; i++){
             setLedColorSolid(255, 255, 255);
 
@@ -30,29 +36,11 @@ public class LightEmittingDiode extends SubsystemBase {
         }
     }
 
-    public void rainbow(){
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-            int hue;
-            if (i<55){
-                hue = (m_rainbowFirstPixelHue + (i * 180 / ledBuffer.getLength())) % 180; 
-                ledBuffer.setHSV(i, hue, 255, 128);
-            }
-            else
-            {
-                hue=0;
-                if ((m_rainbowFirstPixelHue%20)<10)
-                {
-                    ledBuffer.setHSV(i, hue, 255, 0);
-                }
-                else
-                {
-                    ledBuffer.setHSV(i, hue, 255, 128);
-                }
-        
-            }
+    public static void rainbow(){
+        //Middle and top Sections Rainbow
+        for (var i = LEDsections[1][0]; i < LEDsections[0][1]; i++) {
+            ledBuffer.setRGB(i, (int)(Math.random()*255)%255, (int)(Math.random()*255)%255, (int)(Math.random()*255)%255);
         }
-        m_rainbowFirstPixelHue += 3;
-        m_rainbowFirstPixelHue %= 180;
         led.setData(ledBuffer);
     }
 
