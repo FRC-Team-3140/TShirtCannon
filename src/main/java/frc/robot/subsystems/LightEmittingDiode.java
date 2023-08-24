@@ -62,10 +62,7 @@ public class LightEmittingDiode extends SubsystemBase {
         int currentR = 0;
         int currentG = 0;
         int currentB = 0;
-
-        if(rumble == true){
-            //RobotContainer.m_controller.setRumble(GenaricHID.RumbleType.kRightRumble, );
-        }
+        double currentRumble = 0;
         
         for (int i = 0; i < 255; i++){
             if(i < R){
@@ -86,6 +83,12 @@ public class LightEmittingDiode extends SubsystemBase {
                 currentB = B;
             }
             setLedColorSolid(currentR, currentG, currentB);
+
+            if(rumble == true){
+                i/255 = currentRumble;
+            }
+
+            //m_controller.setRumble
          
             Timer.delay(duration - 0.02);
         }
