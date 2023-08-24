@@ -13,6 +13,6 @@ public class arcadedrive extends CommandBase {
     @Override
     public void execute() {
         
-        driveTrain.arcadedrive(RobotContainer.test.getRightX(), RobotContainer.test.getLeftY());
+        driveTrain.arcadedrive(RobotContainer.m_controller.getRightX(), RobotContainer.m_controller.getLeftY());
     }
 }

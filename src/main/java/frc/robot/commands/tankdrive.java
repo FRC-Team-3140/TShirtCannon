@@ -13,7 +13,7 @@ public class tankdrive extends CommandBase {
     @Override
     public void execute() {
         
-        driveTrain.tankdrive(RobotContainer.test.getLeftY(), RobotContainer.test.getRightY());
+        driveTrain.tankdrive(RobotContainer.m_controller.getLeftY(), RobotContainer.m_controller.getRightY());
     }
 }
 

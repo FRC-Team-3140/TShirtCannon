@@ -25,7 +25,7 @@ public class RobotContainer {
 
   public static void controlls(){
     if(m_controller.getLeftBumper()) {
-      LightEmittingDiode.setLedColorSolid(255, 0, 0);
+      LightEmittingDiode.setLedColorSolid(255, 255, 255);
       // new JoystickButton(m_controller, Button.kX.value).onTrue(new InstantCommand(() -> pneumatics.fireLeft()));
       // new JoystickButton(m_controller, Button.kB.value).onTrue(new InstantCommand(() -> pneumatics.fireRight()));
       // new JoystickButton(m_controller, Button.kA.value).onTrue(new InstantCommand(() -> pneumatics.fireMid()));

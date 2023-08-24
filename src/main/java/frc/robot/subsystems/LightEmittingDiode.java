@@ -6,8 +6,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+
 import java.lang.Math;
 
 public class LightEmittingDiode extends SubsystemBase {
@@ -26,7 +29,7 @@ public class LightEmittingDiode extends SubsystemBase {
         led.start();
     }
 
-    public static void flash(int numOfFlashes){
+    public void flash(int numOfFlashes){
         setLedColorSolid(0, 0, 0);
 
         for(int i = 0; i < numOfFlashes; i++){
@@ -49,7 +52,7 @@ public class LightEmittingDiode extends SubsystemBase {
     public static void water(){
         //runs on Bottom Section only
         for (var i = LEDsections[2][0]; i < LEDsections[2][1]; i++){
-            ledBuffer.setRGB(0, 0, (int)(Math.random()*255)%255);
+            ledBuffer.setRGB(i, 0, 0, (int)(Math.random()*255)%255);
         }
         led.setData(ledBuffer);
     }
@@ -84,11 +87,11 @@ public class LightEmittingDiode extends SubsystemBase {
             }
             setLedColorSolid(currentR, currentG, currentB);
 
-            if(rumble == true){
-                i/255 = currentRumble;
+            if(rumble){
+                currentRumble = i / 255;
             }
 
-            //m_controller.setRumble
+            RobotContainer.m_controller.setRumble(RumbleType.kBothRumble, currentRumble);
          
             Timer.delay(duration - 0.02);
         }
