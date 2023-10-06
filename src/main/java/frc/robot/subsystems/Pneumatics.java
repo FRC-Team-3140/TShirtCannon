@@ -9,7 +9,9 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Pneumatics extends SubsystemBase {
-    public Pneumatics(){}
+    public Pneumatics(){
+        closeAll();
+    }
     
     //Locations are declared as looking at the bot from behind
     public static Solenoid leftSolenoid = new Solenoid(4, PneumaticsModuleType.CTREPCM, 0);

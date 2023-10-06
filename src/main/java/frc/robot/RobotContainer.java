@@ -22,6 +22,7 @@ public class RobotContainer {
   public static LightEmittingDiode led = new LightEmittingDiode();
   public static DriveTrain driveTrain = new DriveTrain();
   public static XboxController m_controller = new XboxController(0);
+  public static Lidar m_lidar = new Lidar();
 
   private static boolean hasRun = false;
   private static boolean leftFired = false;
@@ -33,10 +34,10 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(new arcadedrive(driveTrain));
   }
 
-  public static void controlls(){
-    if(m_controller.getLeftBumper() && Lidar.getFireAllow()) {
+  public static void controls(){
+    if(m_controller.getLeftBumper() && m_lidar.getFireAllow()) {
       if(!hasRun) {
-        led.setLedColorSolid(255, 0, 0);
+        led.setLedColorSolid(255, 255, 255);
         hasRun = true;
       }
       if(m_controller.getXButtonPressed() && !leftFired){

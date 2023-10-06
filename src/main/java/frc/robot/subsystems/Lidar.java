@@ -19,6 +19,8 @@ public class Lidar extends SubsystemBase {
   private static final XboxController controller = RobotContainer.m_controller;
   private static boolean Override = false; 
 
+  private int i = 0;
+
   public Lidar() {}
 
   @Override
@@ -27,9 +29,11 @@ public class Lidar extends SubsystemBase {
     if(controller.getRightStickButtonPressed()){
       Override = true;
     }
+    sensor.getEntry("Test Count").setInteger(i);
+    i++;
   }
 
-  public static boolean getFireAllow() {
+  public boolean getFireAllow() {
     if(min_dist > minDistCutoff){
       return true;
     } else {
@@ -37,7 +41,7 @@ public class Lidar extends SubsystemBase {
     }
   }
 
-  public static boolean getOverridden(){
+  public boolean getOverridden(){
     return Override;
   }
 }
