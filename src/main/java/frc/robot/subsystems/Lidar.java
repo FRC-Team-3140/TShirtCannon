@@ -15,33 +15,35 @@ public class Lidar extends SubsystemBase {
   private final NetworkTable sensor = inst.getTable("rplidar");
 
   private static double min_dist;
-  private static final double minDistCutoff = (1 * 1000); // RPLidar measures in mm
+  private static final double minDistCutoff = (1); // RPLidar measures in mm
   private static final XboxController controller = RobotContainer.m_controller;
-  private static boolean Override = false; 
-
-  private int i = 0;
+  private static boolean Override = false;
 
   public Lidar() {}
 
   @Override
   public void periodic() {
-    min_dist = sensor.getValue("min_distance").getDouble();
-    if(controller.getRightStickButtonPressed()){
+    min_dist = sensor.getEntry("roi_min_distance").getDouble(0.0);
+    sensor.getEntry("Overridden").setBoolean(Override);
+    sensor.getEntry("getFireAllow()").setBoolean(getFireAllow());
+    sensor.getEntry("roi_min_distance").setDouble(min_dist);
+
+    if (controller.getRightStickButtonPressed()) {
       Override = true;
     }
-    sensor.getEntry("Test Count").setInteger(i);
-    i++;
   }
 
   public boolean getFireAllow() {
-    if(min_dist > minDistCutoff){
+    if (min_dist > minDistCutoff && Override == false) {
       return true;
+    }else if (Override == true){
+      return true;  
     } else {
-      return false; 
+      return false;
     }
   }
 
-  public boolean getOverridden(){
+  public boolean getOverridden() {
     return Override;
   }
 }
