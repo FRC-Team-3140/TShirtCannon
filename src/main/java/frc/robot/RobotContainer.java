@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.arcadedrive;
+import frc.robot.commands.arcadedrive; 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Lidar;
 import frc.robot.subsystems.LightEmittingDiode;
@@ -24,7 +24,6 @@ public class RobotContainer {
   public static XboxController m_controller = new XboxController(0);
   public static Lidar m_lidar = new Lidar();
 
-  private static boolean hasRun = false;
   private static boolean leftFired = false;
   private static boolean rightFired = false;
   private static boolean middleFired = false;
@@ -34,22 +33,20 @@ public class RobotContainer {
     driveTrain.setDefaultCommand(new arcadedrive(driveTrain));
   }
 
-  public static void controls(){
-    if(m_controller.getLeftBumper() && m_lidar.getFireAllow()) {
-      if(!hasRun) {
-        led.setLedColorSolid(255, 255, 255);
-        hasRun = true;
-      }
-      if(m_controller.getXButtonPressed() && !leftFired){
+  public static void controls() {
+    if (m_controller.getLeftBumper() && m_lidar.getFireAllow()) {
+      led.setLedColorSolid(255, 0, 0);
+
+      if (m_controller.getXButtonPressed() && !leftFired) {
         pneumatics.fireLeft();
         leftFired = true;
-      } else if(m_controller.getBButtonPressed() && !rightFired){
+      } else if (m_controller.getBButtonPressed() && !rightFired) {
         pneumatics.fireRight();
         rightFired = true;
-      } else if(m_controller.getAButtonPressed() && !middleFired){
+      } else if (m_controller.getAButtonPressed() && !middleFired) {
         pneumatics.fireMid();
         middleFired = true;
-      } else if(m_controller.getYButtonPressed() && !salvoFired) {
+      } else if (m_controller.getYButtonPressed() && !salvoFired) {
         pneumatics.fireSalvo();
         salvoFired = true;
       } else {
@@ -59,20 +56,21 @@ public class RobotContainer {
         salvoFired = false;
       }
     } else {
-      hasRun = false;
-      led.rainbow();
-      led.water();
+      if (m_lidar.getFireAllow()) {
+        led.rainbow();
+        led.water();
+      }
     }
   }
 
-  public static int getRandomInt(int min, int max){
+  public static int getRandomInt(int min, int max) {
     if (min >= max) {
-			throw new IllegalArgumentException("max must be greater than min");
-		}
+      throw new IllegalArgumentException("max must be greater than min");
+    }
 
-    return (int)(Math.random() * ((max-min)+1) + min);
+    return (int) (Math.random() * ((max - min) + 1) + min);
   }
-  
+
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
