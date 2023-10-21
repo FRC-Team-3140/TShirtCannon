@@ -123,6 +123,7 @@ public class LightEmittingDiode {
             ledBuffer.setRGB(i, 0, 0, RobotContainer.getRandomInt(0, 255));
         }
         led.setData(ledBuffer);
+        Timer.delay(0.1);
     }
 
     public void colorRampUp(int R, int G, int B, double duration, boolean rumble) {

@@ -30,7 +30,7 @@ public class Pneumatics extends SubsystemBase {
 
     public void fireLeft() {
         new ParallelCommandGroup(
-                new InstantCommand(() -> RobotContainer.led.flash(1, 0.2)),
+                new InstantCommand(() -> RobotContainer.led.flash(1)),
                 new InstantCommand(() -> {
                     leftSolenoid.set(true);
                     Timer.delay(valveDelayTime);
@@ -40,7 +40,7 @@ public class Pneumatics extends SubsystemBase {
 
     public void fireMid() {
         new ParallelCommandGroup(
-                new InstantCommand(() -> RobotContainer.led.flash(1, 0.2)),
+                new InstantCommand(() -> RobotContainer.led.flash(1)),
                 new InstantCommand(() -> {
                     midSolenoid.set(true);
                     // slight delay
@@ -51,7 +51,7 @@ public class Pneumatics extends SubsystemBase {
 
     public void fireRight() {
         new ParallelCommandGroup(
-                new InstantCommand(() -> RobotContainer.led.flash(1, 0.2)),
+                new InstantCommand(() -> RobotContainer.led.flash(1)),
                 new InstantCommand(() -> {
                     rightSolenoid.set(true);
                     // slight delay
@@ -61,29 +61,30 @@ public class Pneumatics extends SubsystemBase {
     }
 
     public void fireSalvo() {
-        new ParallelCommandGroup(
-                new InstantCommand(() -> RobotContainer.led.flash(3)),
-                new InstantCommand(() -> {
-                    leftSolenoid.set(true);
-                    // slight delay
-                    Timer.delay(valveDelayTime);
-                    leftSolenoid.set(false);
+        new InstantCommand(() -> {
+            RobotContainer.led.flash(1);
+            leftSolenoid.set(true);
+            // slight delay
+            Timer.delay(valveDelayTime);
+            leftSolenoid.set(false);
 
-                    Timer.delay(salvoDelayTime);
+            Timer.delay(salvoDelayTime);
 
-                    midSolenoid.set(true);
-                    // slight delay
-                    Timer.delay(valveDelayTime);
-                    midSolenoid.set(false);
+            RobotContainer.led.flash(1);
+            midSolenoid.set(true);
+            // slight delay
+            Timer.delay(valveDelayTime);
+            midSolenoid.set(false);
 
-                    Timer.delay(salvoDelayTime);
+            Timer.delay(salvoDelayTime);
 
-                    rightSolenoid.set(true);
-                    // slight delay
-                    Timer.delay(valveDelayTime);
-                    rightSolenoid.set(false);
+            RobotContainer.led.flash(1);
+            rightSolenoid.set(true);
+            // slight delay
+            Timer.delay(valveDelayTime);
+            rightSolenoid.set(false);
 
-                    closeAll();
-                })).schedule();
+            closeAll();
+        }).schedule();
     }
 }
