@@ -15,7 +15,7 @@ public class Lidar extends SubsystemBase {
   private final NetworkTable sensor = inst.getTable("rplidar");
 
   private static double min_dist;
-  private static final double minDistCutoff = (2.5); // RPLidar measures in mm
+  private static final double minDistCutoff = (2.5); // RPLidar measures in M
   private static final XboxController controller = RobotContainer.m_controller;
   private static boolean Override = false;
 

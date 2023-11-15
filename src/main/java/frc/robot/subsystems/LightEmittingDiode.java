@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import frc.robot.RobotContainer;
 
 public class LightEmittingDiode {
-    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(95); // 32 LED's in Top | 33 LED's Around
+    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(93); // 32 LED's in Top | 33 LED's Around
                                                                                   // Cannon | 83 LED's on the bottom
     private static AddressableLED led;
-    private static final int[] Top = { 83, 95 }; // Last 12 LEDs
-    private static final int[] Mid = { 51, 83 }; // Middle 32
-    private static final int[] Bottom = { 0, 51 }; // First 51
+    private static final int[] Top = { 81, 93 }; // Last 12 LEDs
+    private static final int[] Mid = { 49, 81 }; // Middle 32
+    private static final int[] Bottom = { 0, 49 }; // First 51
 
     // min and max LED buffer index for each section
     private static final int[][] LEDsections = { Top, Mid, Bottom };
