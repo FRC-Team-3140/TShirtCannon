@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import frc.robot.RobotContainer;
 
 public class LightEmittingDiode {
-    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(93); // 32 LED's in Top | 33 LED's Around
-                                                                                  // Cannon | 83 LED's on the bottom
+    private static LightEmittingDiode instance = null;
+
+    // 32 LED's in Top | 33 LED's Around Cannon | 83 LED's on the bottom
+    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(93);
+
     private static AddressableLED led;
     private static final int[] Top = { 81, 93 }; // Last 12 LEDs
     private static final int[] Mid = { 49, 81 }; // Middle 32
@@ -28,7 +31,14 @@ public class LightEmittingDiode {
 
     public static int ledRainbowSpan = 5;
 
-    public LightEmittingDiode() {
+    public static LightEmittingDiode getInstance() {
+        if (instance != null) {
+            return instance;
+        }
+        return new LightEmittingDiode();
+    }
+
+    private LightEmittingDiode() {
         led = new AddressableLED(0);
         led.setLength(ledBuffer.getLength());
         led.start();
@@ -78,7 +88,8 @@ public class LightEmittingDiode {
     public void rainbow() {
         // Middle and top Sections Rainbow
         int hue;
-        for (int i = LEDsections[1][0]; i < LEDsections[0][1]; i++) {// = LEDsections[1][0]; i < LEDsections[0][1]; i++) {
+        for (int i = LEDsections[1][0]; i < LEDsections[0][1]; i++) {// = LEDsections[1][0]; i < LEDsections[0][1]; i++)
+                                                                     // {
             hue = (m_rainbowFirstPixelHue + i * ledRainbowSpan) % 180;
             ledBuffer.setHSV(i, hue, 255, 128);
         }

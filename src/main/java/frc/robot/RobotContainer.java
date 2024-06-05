@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.arcadedrive; 
+import frc.robot.commands.arcadedrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Lidar;
 import frc.robot.subsystems.LightEmittingDiode;
@@ -18,8 +18,8 @@ public class RobotContainer {
     configureBindings();
   }
 
-  public static Pneumatics pneumatics = new Pneumatics();
-  public static LightEmittingDiode led = new LightEmittingDiode();
+  public static Pneumatics pneumatics = Pneumatics.getInstance();
+  public static LightEmittingDiode led = LightEmittingDiode.getInstance();
   public static DriveTrain driveTrain = new DriveTrain();
   public static XboxController m_controller = new XboxController(0);
   public static Lidar m_lidar = new Lidar();
@@ -34,6 +34,7 @@ public class RobotContainer {
   }
 
   public static void controls() {
+    // Consider moving this code to a command - TK
     if (m_controller.getLeftBumper() && m_lidar.getFireAllow()) {
       led.setLedColorSolid(255, 0, 0);
 

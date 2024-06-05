@@ -9,7 +9,17 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Pneumatics extends SubsystemBase {
-    public Pneumatics() {
+    private static Pneumatics instance = null; 
+    
+    public static Pneumatics getInstance() {
+        if (instance != null) {
+            return instance;
+        } else {
+            return new Pneumatics();
+        }
+    }
+    
+    private Pneumatics() {
         closeAll();
     }
 
