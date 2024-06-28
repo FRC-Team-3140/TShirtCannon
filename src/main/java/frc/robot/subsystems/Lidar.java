@@ -25,15 +25,18 @@ public class Lidar extends SubsystemBase {
   @Override
   public void periodic() {
     if (!Override) {
-      min_dist = sensor.getSubTable("rplidar").getEntry("roi_min_distance").getDouble(0.0);
-      sensor.getEntry("Overridden").setBoolean(Override);
-      sensor.getEntry("getFireAllow()").setBoolean(getFireAllow());
-      sensor.getEntry("roi_min_distance").setDouble(min_dist);
+      if (sensor.getSubTable("rplidar").getEntry("status").getString("").equals("running")) {
+        min_dist = sensor.getSubTable("rplidar").getEntry("roi_min_distance").getDouble(0.0);
+      }
 
       if (controller.getRightStickButtonPressed()) {
         Override = true;
       }
     }
+    
+    sensor.getEntry("Overridden").setBoolean(Override);
+    sensor.getEntry("getFireAllow()").setBoolean(getFireAllow());
+    sensor.getEntry("roi_min_distance").setDouble(min_dist);
   }
 
   public boolean getFireAllow() {

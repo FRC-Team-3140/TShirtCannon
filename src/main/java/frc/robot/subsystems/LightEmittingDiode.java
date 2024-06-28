@@ -35,7 +35,8 @@ public class LightEmittingDiode {
         if (instance != null) {
             return instance;
         }
-        return new LightEmittingDiode();
+        instance = new LightEmittingDiode();
+        return instance;
     }
 
     private LightEmittingDiode() {
@@ -50,7 +51,7 @@ public class LightEmittingDiode {
         for (int i = 0; i < numOfFlashes; i++) {
             setLedColorSolid(255, 255, 255);
 
-            Timer.delay(0.1);
+            Timer.delay(Pneumatics.salvoDelayTime);
 
             setLedColorSolid(0, 0, 0);
 

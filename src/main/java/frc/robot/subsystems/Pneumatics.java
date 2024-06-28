@@ -4,21 +4,23 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Pneumatics extends SubsystemBase {
-    private static Pneumatics instance = null; 
-    
+    private static Pneumatics instance = null;
+
     public static Pneumatics getInstance() {
         if (instance != null) {
             return instance;
-        } else {
-            return new Pneumatics();
         }
+        instance = new Pneumatics();
+        return instance;
     }
-    
+
     private Pneumatics() {
         closeAll();
     }
@@ -45,7 +47,8 @@ public class Pneumatics extends SubsystemBase {
                     leftSolenoid.set(true);
                     Timer.delay(valveDelayTime);
                     leftSolenoid.set(false);
-                })).schedule();
+                }),
+                new WaitCommand(salvoDelayTime)).schedule();
     }
 
     public void fireMid() {
@@ -71,30 +74,40 @@ public class Pneumatics extends SubsystemBase {
     }
 
     public void fireSalvo() {
-        new InstantCommand(() -> {
-            RobotContainer.led.flash(1);
-            leftSolenoid.set(true);
-            // slight delay
-            Timer.delay(valveDelayTime);
-            leftSolenoid.set(false);
+        new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> RobotContainer.led.flash(1)),
+                        new InstantCommand(() -> {
+                            leftSolenoid.set(true);
+                            // slight delay
+                            Timer.delay(valveDelayTime);
+                            leftSolenoid.set(false);
+                        })),
 
-            Timer.delay(salvoDelayTime);
+                new WaitCommand(salvoDelayTime),
 
-            RobotContainer.led.flash(1);
-            midSolenoid.set(true);
-            // slight delay
-            Timer.delay(valveDelayTime);
-            midSolenoid.set(false);
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> RobotContainer.led.flash(1)),
+                        new InstantCommand(() -> {
+                            midSolenoid.set(true);
+                            // slight delay
+                            Timer.delay(valveDelayTime);
+                            midSolenoid.set(false);
+                        })),
 
-            Timer.delay(salvoDelayTime);
+                new WaitCommand(salvoDelayTime),
 
-            RobotContainer.led.flash(1);
-            rightSolenoid.set(true);
-            // slight delay
-            Timer.delay(valveDelayTime);
-            rightSolenoid.set(false);
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> RobotContainer.led.flash(1)),
+                        new InstantCommand(() -> {
+                            rightSolenoid.set(true);
+                            // slight delay
+                            Timer.delay(valveDelayTime);
+                            rightSolenoid.set(false);
+                        })),
 
-            closeAll();
-        }).schedule();
+                new WaitCommand(salvoDelayTime),
+
+                new InstantCommand(() -> closeAll())).schedule();
     }
 }
