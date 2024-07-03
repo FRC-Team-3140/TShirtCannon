@@ -7,11 +7,14 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
-    private static DriveTrain instance = null; 
-    
+    private static DriveTrain instance = null;
+
     // private double deadzone = 0.1;
 
-    private final DifferentialDrive m_Drive; 
+    // Current limit in amps
+    private final int ampLimit = 30;
+
+    private final DifferentialDrive m_Drive;
 
     // Left side motors need to be inverted
     WPI_TalonSRX flSrx = new WPI_TalonSRX(6);
@@ -30,8 +33,9 @@ public class DriveTrain extends SubsystemBase {
     }
 
     private DriveTrain() {
-        factoryReset(); 
+        factoryReset();
         setIdleModes();
+        setCurrentLimits();
         blSrx.follow(flSrx);
         tlSrx.follow(flSrx);
         brSrx.follow(frSrx);
@@ -58,18 +62,27 @@ public class DriveTrain extends SubsystemBase {
         brSrx.setNeutralMode(NeutralMode.Brake);
     }
 
+    private void setCurrentLimits() {
+        flSrx.configContinuousCurrentLimit(ampLimit);
+        frSrx.configContinuousCurrentLimit(ampLimit);
+        tlSrx.configContinuousCurrentLimit(ampLimit);
+        trSrx.configContinuousCurrentLimit(ampLimit);
+        blSrx.configContinuousCurrentLimit(ampLimit);
+        brSrx.configContinuousCurrentLimit(ampLimit);
+    }
+
     // public void tankdrive(double leftPercent, double rightPercent) {
-    //     flSrx.set(ControlMode.PercentOutput, -leftPercent);
-    //     frSrx.set(ControlMode.PercentOutput, rightPercent);
+    // flSrx.set(ControlMode.PercentOutput, -leftPercent);
+    // frSrx.set(ControlMode.PercentOutput, rightPercent);
     // }
 
-    public void arcadedrive(double x, double y) { 
+    public void arcadedrive(double x, double y) {
         // if (Math.abs(x) > deadzone || Math.abs(y) > deadzone) {
-        //     flSrx.set(ControlMode.PercentOutput, -(y - x));
-        //     frSrx.set(ControlMode.PercentOutput, (x + y));
+        // flSrx.set(ControlMode.PercentOutput, -(y - x));
+        // frSrx.set(ControlMode.PercentOutput, (x + y));
         // } else {
-        //     flSrx.set(ControlMode.PercentOutput, 0);
-        //     frSrx.set(ControlMode.PercentOutput, 0);
+        // flSrx.set(ControlMode.PercentOutput, 0);
+        // frSrx.set(ControlMode.PercentOutput, 0);
         // }
         m_Drive.arcadeDrive(x, y);
     }
