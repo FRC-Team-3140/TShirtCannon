@@ -14,6 +14,8 @@ import frc.robot.RobotContainer;
 public class LightEmittingDiode {
     private static LightEmittingDiode instance = null;
 
+    private static int mode = 0; 
+
     // 32 LED's in Top | 33 LED's Around Cannon | 83 LED's on the bottom
     private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(93);
 
@@ -32,72 +34,78 @@ public class LightEmittingDiode {
     public static int ledRainbowSpan = 5;
 
     public static LightEmittingDiode getInstance() {
-        if (instance != null) {
-            return instance;
+        if (instance == null) {
+            instance = new LightEmittingDiode();
         }
-        instance = new LightEmittingDiode();
         return instance;
     }
 
     private LightEmittingDiode() {
-        led = new AddressableLED(0);
-        led.setLength(ledBuffer.getLength());
-        led.start();
+        // led = new AddressableLED(0);
+        // led.setLength(ledBuffer.getLength());
+        // led.start();
 
         inst.getTable("LED Ranbow Setting").getEntry("LED Ranbow Span Setting: ").setInteger(ledRainbowSpan);
+        inst.getTable("LEDControl").getEntry("mode").setInteger(mode);
+        inst.getTable("LEDControl").getEntry("timestamp").setDouble(System.currentTimeMillis());
+        inst.getTable("LEDControl").getEntry("R").setInteger(255);
+        inst.getTable("LEDControl").getEntry("G").setInteger(255);
+        inst.getTable("LEDControl").getEntry("B").setInteger(255);
     }
 
-    public void flash(int numOfFlashes) {
-        for (int i = 0; i < numOfFlashes; i++) {
-            setLedColorSolid(255, 255, 255);
+    // public void flash(int numOfFlashes) {
+    //     for (int i = 0; i < numOfFlashes; i++) {
+    //         setLedColorSolid(255, 255, 255);
 
-            Timer.delay(Pneumatics.salvoDelayTime);
+    //         Timer.delay(Pneumatics.salvoDelayTime);
 
-            setLedColorSolid(0, 0, 0);
+    //         setLedColorSolid(0, 0, 0);
 
-            if (numOfFlashes > 1) {
-                Timer.delay(Pneumatics.salvoDelayTime);
-            }
-            Timer.delay(0.1);
-        }
-    }
+    //         if (numOfFlashes > 1) {
+    //             Timer.delay(Pneumatics.salvoDelayTime);
+    //         }
+    //         Timer.delay(0.1);
+    //     }
+    // }
 
-    public void flash(int numOfFlashes, double delay) {
-        for (int i = 0; i < numOfFlashes; i++) {
-            setLedColorSolid(255, 255, 255);
+    // public void flash(int numOfFlashes, double delay) {
+    //     for (int i = 0; i < numOfFlashes; i++) {
+    //         setLedColorSolid(255, 255, 255);
 
-            Timer.delay(delay);
+    //         Timer.delay(delay);
 
-            setLedColorSolid(0, 0, 0);
+    //         setLedColorSolid(0, 0, 0);
 
-            Timer.delay(delay);
-        }
-    }
+    //         Timer.delay(delay);
+    //     }
+    // }
 
-    public void flash(int numOfFlashes, double lengthOfFlash, double delayBetweenFlashes) {
-        for (int i = 0; i < numOfFlashes; i++) {
-            setLedColorSolid(255, 255, 255);
+    // public void flash(int numOfFlashes, double lengthOfFlash, double delayBetweenFlashes) {
+    //     for (int i = 0; i < numOfFlashes; i++) {
+    //         setLedColorSolid(255, 255, 255);
 
-            Timer.delay(lengthOfFlash);
+    //         Timer.delay(lengthOfFlash);
 
-            setLedColorSolid(0, 0, 0);
+    //         setLedColorSolid(0, 0, 0);
 
-            Timer.delay(delayBetweenFlashes);
-        }
-    }
+    //         Timer.delay(delayBetweenFlashes);
+    //     }
+    // }
 
     public void rainbow() {
-        // Middle and top Sections Rainbow
-        int hue;
-        for (int i = LEDsections[1][0]; i < LEDsections[0][1]; i++) {// = LEDsections[1][0]; i < LEDsections[0][1]; i++)
-                                                                     // {
-            hue = (m_rainbowFirstPixelHue + i * ledRainbowSpan) % 180;
-            ledBuffer.setHSV(i, hue, 255, 128);
-        }
-        m_rainbowFirstPixelHue += 3;
-        led.setData(ledBuffer);
+        mode = 1; 
 
-        ledRainbowSpan = (int) inst.getTable("LED Ranbow Setting").getEntry("LED Ranbow Span Setting: ").getInteger(0);
+        // // Middle and top Sections Rainbow
+        // int hue;
+        // for (int i = LEDsections[1][0]; i < LEDsections[0][1]; i++) {// = LEDsections[1][0]; i < LEDsections[0][1]; i++)
+        //                                                              // {
+        //     hue = (m_rainbowFirstPixelHue + i * ledRainbowSpan) % 180;
+        //     ledBuffer.setHSV(i, hue, 255, 128);
+        // }
+        // m_rainbowFirstPixelHue += 3;
+        // led.setData(ledBuffer);
+
+        // ledRainbowSpan = (int) inst.getTable("LED Ranbow Setting").getEntry("LED Ranbow Span Setting: ").getInteger(0);
     }
     /*
      * public void rainbow() {
@@ -139,50 +147,51 @@ public class LightEmittingDiode {
     }
 
     public void colorRampUp(int R, int G, int B, double duration, boolean rumble) {
-        /***************************************************************/
-        /* This method takes in a color and ramps up to that color over */
-        /* a duration. */
-        /***************************************************************/
-        int currentR = 0;
-        int currentG = 0;
-        int currentB = 0;
-        double currentRumble = 0;
+        // /***************************************************************/
+        // /* This method takes in a color and ramps up to that color over */
+        // /* a duration. */
+        // /***************************************************************/
+        // int currentR = 0;
+        // int currentG = 0;
+        // int currentB = 0;
+        // double currentRumble = 0;
 
-        for (int i = 0; i < 255; i++) {
-            if (i < R) {
-                currentR = i;
-            } else {
-                currentR = R;
-            }
+        // for (int i = 0; i < 255; i++) {
+        //     if (i < R) {
+        //         currentR = i;
+        //     } else {
+        //         currentR = R;
+        //     }
 
-            if (i < G) {
-                currentG = i;
-            } else {
-                currentG = G;
-            }
+        //     if (i < G) {
+        //         currentG = i;
+        //     } else {
+        //         currentG = G;
+        //     }
 
-            if (i < B) {
-                currentB = i;
-            } else {
-                currentB = B;
-            }
-            setLedColorSolid(currentR, currentG, currentB);
+        //     if (i < B) {
+        //         currentB = i;
+        //     } else {
+        //         currentB = B;
+        //     }
+        //     setLedColorSolid(currentR, currentG, currentB);
 
-            if (rumble) {
-                currentRumble = i / 255;
-            }
+        //     if (rumble) {
+        //         currentRumble = i / 255;
+        //     }
 
-            RobotContainer.m_controller.setRumble(RumbleType.kBothRumble, currentRumble);
+        //     RobotContainer.m_controller.setRumble(RumbleType.kBothRumble, currentRumble);
 
-            Timer.delay(duration - 0.02);
-        }
+        //     Timer.delay(duration - 0.02);
+        // }
 
     }
 
     public void setLedColorSolid(int R, int G, int B) {
-        for (int i = 0; i < ledBuffer.getLength(); i++) {
-            ledBuffer.setRGB(i, R, G, B);
-        }
-        led.setData(ledBuffer);
+        mode = 1; 
+        // for (int i = 0; i < ledBuffer.getLength(); i++) {
+        //     ledBuffer.setRGB(i, R, G, B);
+        // }
+        // led.setData(ledBuffer);
     }
 }
