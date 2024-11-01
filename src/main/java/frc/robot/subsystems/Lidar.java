@@ -38,7 +38,7 @@ public class Lidar extends SubsystemBase {
     sensor.getEntry("getFireAllow()").setBoolean(getFireAllow());
     sensor.getEntry("roi_min_distance").setDouble(min_dist);
 
-    if (!sensor.getSubTable("rplidar").getEntry("status").getString("").equals("running")) {
+    if (!sensor.getSubTable("rplidar").getEntry("status").getString("").equals("running") && !Override) {
       RobotContainer.led.error();
     }
   }
