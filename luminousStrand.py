@@ -125,16 +125,20 @@ class errorCode(threading.Thread):
 
     def errorCode(self):
         while self.errorThreadRun:
-            set_Color_Solid(255, 0, 0)
+            strip.fill((255,0,0))
+            strip.show()
 
             time.sleep(delayBetweenErrors)
 
-            set_Color_Solid(0, 0, 0)
+            strip.fill((0,0,0))
+            strip.show()
+            
 
             time.sleep(delayBetweenErrors)
 
 
 def error():
+    global thread
     if thread is None:
         thread = errorCode()
         thread.start()
@@ -179,26 +183,33 @@ def default():
 
 
 # LED Control Methods
-def set_Color_Solid():
+def set_Color_Solid(r = -1, g = -1, b = -1):
     if thread is not None:
         error()
 
-    strip.fill(table.getInt("R", 0), table.getInt("G", 0), table.getInt("B", 0))
+    if r == -1:
+        r = table.getEntry("R").getNumber(0)
+    if g == -1:
+        g = table.getEntry("G").getNumber(0)
+    if b == -1:
+        b = table.getEntry("B").getNumber(0)
+
+    strip.fill((r, g, b))
     strip.show()
 
 
 def flash():
-    strip.fill(255, 255, 255)
+    strip.fill((255, 255, 255))
 
-    eventTime = table.getDouble("eventTime", 0)
+    eventTime = table.getEntry("eventTime").getNumber(0)
 
-    while eventTime is not 0 and not (table.getDouble("timestamp", 0) >= eventTime):
+    while eventTime is not 0 and not (table.getEntry("timestamp").getNumber(0) >= eventTime):
         strip.show()
 
 
 def get_mode_and_timestamp():
-    mode = table.getNumber("mode", 0)
-    timestamp = table.getNumber("timestamp", 0)
+    mode = table.getEntry("mode").getNumber(0)
+    timestamp = table.getEntry("timestamp").getNumber(0)
     return mode, timestamp
 
 
