@@ -4,35 +4,43 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.AddressableLED;
-import frc.robot.RobotContainer;
 
 public class LightEmittingDiode {
     private static LightEmittingDiode instance = null;
 
-    private static int mode = 0; 
-
-    // 32 LED's in Top | 33 LED's Around Cannon | 83 LED's on the bottom
-    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(93);
-
-    private static AddressableLED led;
-    private static final int[] Top = { 81, 93 }; // Last 12 LEDs
-    private static final int[] Mid = { 49, 81 }; // Middle 32
-    private static final int[] Bottom = { 0, 49 }; // First 51
-
-    // min and max LED buffer index for each section
-    private static final int[][] LEDsections = { Top, Mid, Bottom };
-
-    private static int m_rainbowFirstPixelHue = 0;
-
     private static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
 
-    public static int ledRainbowSpan = 5;
+    private NetworkTableEntry modeTable = inst.getTable("LEDControl").getEntry("mode");
 
+    private NetworkTableEntry waterMode = inst.getTable("LEDControl").getEntry("waterMode"); 
+
+    private NetworkTableEntry eventTime = inst.getTable("LEDControl").getEntry("eventTime"); 
+
+    private int mode = 0;
+
+    private NetworkTableEntry R = inst.getTable("LEDControl").getEntry("R");
+    private NetworkTableEntry G = inst.getTable("LEDControl").getEntry("G");
+    private NetworkTableEntry B = inst.getTable("LEDControl").getEntry("B");
+
+    public enum defaultWaterMode {
+        NOISE("Noise"),
+        SINE("Sine"),
+        RANDOM("Random");
+    
+        private final String modeName;
+    
+        defaultWaterMode(String modeName) {
+            this.modeName = modeName;
+        }
+    
+        public String getModeName() {
+            return modeName;
+        }
+    }
+    
     public static LightEmittingDiode getInstance() {
         if (instance == null) {
             instance = new LightEmittingDiode();
@@ -41,109 +49,51 @@ public class LightEmittingDiode {
     }
 
     private LightEmittingDiode() {
-        // led = new AddressableLED(0);
-        // led.setLength(ledBuffer.getLength());
-        // led.start();
+        waterMode.setString(defaultWaterMode.RANDOM.getModeName());
 
-        inst.getTable("LED Ranbow Setting").getEntry("LED Ranbow Span Setting: ").setInteger(ledRainbowSpan);
-        inst.getTable("LEDControl").getEntry("mode").setInteger(mode);
-        inst.getTable("LEDControl").getEntry("timestamp").setDouble(System.currentTimeMillis());
-        inst.getTable("LEDControl").getEntry("R").setInteger(255);
-        inst.getTable("LEDControl").getEntry("G").setInteger(255);
-        inst.getTable("LEDControl").getEntry("B").setInteger(255);
+        modeTable.setInteger(mode);
+
+        new Thread(() -> updateTime()).start();
+
+        R.setInteger(255);
+        G.setInteger(255);
+        B.setInteger(255);
     }
 
-    // public void flash(int numOfFlashes) {
-    //     for (int i = 0; i < numOfFlashes; i++) {
-    //         setLedColorSolid(255, 255, 255);
-
-    //         Timer.delay(Pneumatics.salvoDelayTime);
-
-    //         setLedColorSolid(0, 0, 0);
-
-    //         if (numOfFlashes > 1) {
-    //             Timer.delay(Pneumatics.salvoDelayTime);
-    //         }
-    //         Timer.delay(0.1);
-    //     }
-    // }
-
-    // public void flash(int numOfFlashes, double delay) {
-    //     for (int i = 0; i < numOfFlashes; i++) {
-    //         setLedColorSolid(255, 255, 255);
-
-    //         Timer.delay(delay);
-
-    //         setLedColorSolid(0, 0, 0);
-
-    //         Timer.delay(delay);
-    //     }
-    // }
-
-    // public void flash(int numOfFlashes, double lengthOfFlash, double delayBetweenFlashes) {
-    //     for (int i = 0; i < numOfFlashes; i++) {
-    //         setLedColorSolid(255, 255, 255);
-
-    //         Timer.delay(lengthOfFlash);
-
-    //         setLedColorSolid(0, 0, 0);
-
-    //         Timer.delay(delayBetweenFlashes);
-    //     }
-    // }
-
-    public void rainbow() {
-        mode = 1; 
-
-        // // Middle and top Sections Rainbow
-        // int hue;
-        // for (int i = LEDsections[1][0]; i < LEDsections[0][1]; i++) {// = LEDsections[1][0]; i < LEDsections[0][1]; i++)
-        //                                                              // {
-        //     hue = (m_rainbowFirstPixelHue + i * ledRainbowSpan) % 180;
-        //     ledBuffer.setHSV(i, hue, 255, 128);
-        // }
-        // m_rainbowFirstPixelHue += 3;
-        // led.setData(ledBuffer);
-
-        // ledRainbowSpan = (int) inst.getTable("LED Ranbow Setting").getEntry("LED Ranbow Span Setting: ").getInteger(0);
-    }
-    /*
-     * public void rainbow() {
-     * if(runRainbow) { // jesse and elynn were here haha >:D
-     * for (var i = 0; i < ledBuffer.getLength(); i++) {
-     * int hue;
-     * if (i<55){
-     * hue = (m_rainbowFirstPixelHue + (i * 180 / ledBuffer.getLength())) % 180;
-     * ledBuffer.setHSV(i, hue, 255, 128);
-     * }
-     * else
-     * {
-     * hue=0;
-     * if ((m_rainbowFirstPixelHue%20)<10)
-     * {
-     * ledBuffer.setHSV(i, hue, 255, 0);
-     * }
-     * else
-     * {
-     * ledBuffer.setHSV(i, hue, 255, 128);
-     * }
-     * 
-     * }
-     * }
-     * m_rainbowFirstPixelHue += 3;
-     * m_rainbowFirstPixelHue %= 180;
-     * led.setData(ledBuffer);
-     * }
-     * }
-     */
-
-    public void water() {
-        // runs on Bottom Section only
-        for (var i = LEDsections[2][0]; i < LEDsections[2][1]; i++) {
-            ledBuffer.setRGB(i, 0, 0, RobotContainer.getRandomInt(0, 255));
+    private void updateTime() {
+        while (true) {
+            inst.getTable("LEDControl").getEntry("timestamp").setDouble(Timer.getFPGATimestamp());
         }
-        led.setData(ledBuffer);
-        Timer.delay(0.1);
+    }
+
+    public void setDefault(defaultWaterMode mode) {
+        this.mode = 0;
+
+        modeTable.setInteger(this.mode);
+
+        waterMode.setString(mode.getModeName());
+    }
+
+    public void error() {
+        mode = 1;
+
+        modeTable.setInteger(mode);
+    }
+
+    public void setLedColorSolid(int R, int G, int B) {
+        mode = 2;
+
+        modeTable.setInteger(this.mode);
+
+        this.R.setInteger(R);
+        this.G.setInteger(G);
+        this.B.setInteger(B);
+    }
+
+    public void flash() {
+        mode = 3;
+
+        eventTime.setDouble(Timer.getFPGATimestamp() + 1); // Current time plus 1 second - TK
     }
 
     public void colorRampUp(int R, int G, int B, double duration, boolean rumble) {
@@ -157,41 +107,32 @@ public class LightEmittingDiode {
         // double currentRumble = 0;
 
         // for (int i = 0; i < 255; i++) {
-        //     if (i < R) {
-        //         currentR = i;
-        //     } else {
-        //         currentR = R;
-        //     }
-
-        //     if (i < G) {
-        //         currentG = i;
-        //     } else {
-        //         currentG = G;
-        //     }
-
-        //     if (i < B) {
-        //         currentB = i;
-        //     } else {
-        //         currentB = B;
-        //     }
-        //     setLedColorSolid(currentR, currentG, currentB);
-
-        //     if (rumble) {
-        //         currentRumble = i / 255;
-        //     }
-
-        //     RobotContainer.m_controller.setRumble(RumbleType.kBothRumble, currentRumble);
-
-        //     Timer.delay(duration - 0.02);
+        // if (i < R) {
+        // currentR = i;
+        // } else {
+        // currentR = R;
         // }
 
-    }
-
-    public void setLedColorSolid(int R, int G, int B) {
-        mode = 1; 
-        // for (int i = 0; i < ledBuffer.getLength(); i++) {
-        //     ledBuffer.setRGB(i, R, G, B);
+        // if (i < G) {
+        // currentG = i;
+        // } else {
+        // currentG = G;
         // }
-        // led.setData(ledBuffer);
+
+        // if (i < B) {
+        // currentB = i;
+        // } else {
+        // currentB = B;
+        // }
+        // setLedColorSolid(currentR, currentG, currentB);
+
+        // if (rumble) {
+        // currentRumble = i / 255;
+        // }
+
+        // RobotContainer.m_controller.setRumble(RumbleType.kBothRumble, currentRumble);
+
+        // Timer.delay(duration - 0.02);
+        // }
     }
 }

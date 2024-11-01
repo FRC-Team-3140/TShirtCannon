@@ -52,8 +52,7 @@ public class Controls extends SubsystemBase {
       }
     } else {
       if (RobotContainer.m_lidar.getFireAllow()) {
-        RobotContainer.led.rainbow();
-        RobotContainer.led.water();
+        RobotContainer.led.setDefault(LightEmittingDiode.defaultWaterMode.RANDOM);
       }
     }
   }

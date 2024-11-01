@@ -33,19 +33,27 @@ public class Lidar extends SubsystemBase {
         Override = true;
       }
     }
-    
+
     sensor.getEntry("Overridden").setBoolean(Override);
     sensor.getEntry("getFireAllow()").setBoolean(getFireAllow());
     sensor.getEntry("roi_min_distance").setDouble(min_dist);
+
+    if (!sensor.getSubTable("rplidar").getEntry("status").getString("").equals("running")) {
+      RobotContainer.led.error();
+    }
   }
 
   public boolean getFireAllow() {
-    if (min_dist != 0 && min_dist > minDistCutoff && Override == false) {
+    if (min_dist != 0 && min_dist > minDistCutoff && Override == false
+        && sensor.getSubTable("rplidar").getEntry("status").getString("").equals("running")) {
       return true;
     } else if (Override == true) {
       return true;
+    } else if (min_dist != 0 && min_dist < minDistCutoff && Override == false
+        && sensor.getSubTable("rplidar").getEntry("status").getString("").equals("running")) {
+          RobotContainer.led.setLedColorSolid(255, 255, 0);
+          return false;
     } else {
-      RobotContainer.led.setLedColorSolid(255, 255, 0);
       return false;
     }
   }

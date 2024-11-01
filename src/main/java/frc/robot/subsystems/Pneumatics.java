@@ -42,7 +42,7 @@ public class Pneumatics extends SubsystemBase {
 
     public void fireLeft() {
         new ParallelCommandGroup(
-                new InstantCommand(() -> RobotContainer.led.flash(1)),
+                new InstantCommand(() -> RobotContainer.led.flash()),
                 new InstantCommand(() -> {
                     leftSolenoid.set(true);
                     Timer.delay(valveDelayTime);
@@ -53,7 +53,7 @@ public class Pneumatics extends SubsystemBase {
 
     public void fireMid() {
         new ParallelCommandGroup(
-                new InstantCommand(() -> RobotContainer.led.flash(1)),
+                new InstantCommand(() -> RobotContainer.led.flash()),
                 new InstantCommand(() -> {
                     midSolenoid.set(true);
                     // slight delay
@@ -64,7 +64,7 @@ public class Pneumatics extends SubsystemBase {
 
     public void fireRight() {
         new ParallelCommandGroup(
-                new InstantCommand(() -> RobotContainer.led.flash(1)),
+                new InstantCommand(() -> RobotContainer.led.flash()),
                 new InstantCommand(() -> {
                     rightSolenoid.set(true);
                     // slight delay
@@ -76,7 +76,7 @@ public class Pneumatics extends SubsystemBase {
     public void fireSalvo() {
         new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> RobotContainer.led.flash(1)),
+                        new InstantCommand(() -> RobotContainer.led.flash()),
                         new InstantCommand(() -> {
                             leftSolenoid.set(true);
                             // slight delay
@@ -87,7 +87,7 @@ public class Pneumatics extends SubsystemBase {
                 new WaitCommand(salvoDelayTime),
 
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> RobotContainer.led.flash(1)),
+                        new InstantCommand(() -> RobotContainer.led.flash()),
                         new InstantCommand(() -> {
                             midSolenoid.set(true);
                             // slight delay
@@ -98,7 +98,7 @@ public class Pneumatics extends SubsystemBase {
                 new WaitCommand(salvoDelayTime),
 
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> RobotContainer.led.flash(1)),
+                        new InstantCommand(() -> RobotContainer.led.flash()),
                         new InstantCommand(() -> {
                             rightSolenoid.set(true);
                             // slight delay
