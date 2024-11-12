@@ -40,9 +40,6 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> bubble.off()));
   }
 
-  public static void controls() {
-  }
-
   public static int getRandomInt(int min, int max) {
     if (min >= max) {
       throw new IllegalArgumentException("max must be greater than min");
